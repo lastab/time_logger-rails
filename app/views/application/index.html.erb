@@ -1,0 +1,26 @@
+<table border="1">
+  <tr>
+    <td>
+      Start At
+    </td>
+    <td>
+      End At
+    </td>
+    <td>
+      Minutes
+    </td>
+  </tr>
+  <%- @timelogs.each do |timelog|%>
+    <tr>
+      <td>
+        <%= timelog.start_at.strftime('%d/%m/%Y %H:%M') %>
+      </td>
+      <td>
+        <%= timelog.end_at.strftime('%d/%m/%Y %H:%M') %>
+      </td>
+      <td>
+        <%= timelog.duration %>
+      </td>
+    </tr>
+  <%- end %>
+</table>
