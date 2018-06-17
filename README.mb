@@ -1,0 +1,3 @@
+# Time logger
+
+This rails-app takes start_at and end_at as input and list them along with duration.
