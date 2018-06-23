@@ -5,6 +5,11 @@ class TimeLogsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:start, :end, :notify_slack]
   def index
     @timelogs = Timelog.all
+    if params[:date]
+      start_time = Time.parse(params[:date]).beginning_of_day
+      end_time  = start_time.end_of_day
+      @timelogs = @timelogs.where(start_at: [start_time...end_time])
+    end
     # @timelogs = @timelogs.where
 
     @timelogs = @timelogs.paginate(page: params[:page], per_page: 15)
