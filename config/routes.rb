@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
-  root 'application#index'
+  root 'time_logs#index'
 
-  post 'create' => 'application#create'
-
+  post 'start' => 'time_logs#start'
+  post 'end' => 'time_logs#end'
+  get 'slack_notification' => 'time_logs#slack_notification'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
