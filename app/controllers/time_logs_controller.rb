@@ -2,7 +2,7 @@ class TimeLogsController < ApplicationController
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  skip_before_action :verify_authenticity_token, only: [:create]
+  skip_before_action :verify_authenticity_token, only: [:start, :end, :notify_slack]
   def index
     @timelogs = Timelog.all
     # notifier = Slack::Notifier.new ENV["SLACK_URL"]
