@@ -26,6 +26,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # slack-notifier
 gem 'slack-notifier', '~> 1.5', '>= 1.5.1'
 
+gem 'will_paginate'
+
 # environment variables
 gem 'dotenv-rails', '~> 2.1', '>= 2.1.1'
 

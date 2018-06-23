@@ -5,6 +5,9 @@ class TimeLogsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:start, :end, :notify_slack]
   def index
     @timelogs = Timelog.all
+    # @timelogs = @timelogs.where
+
+    @timelogs = @timelogs.paginate(page: params[:page], per_page: 15)
     # notifier = Slack::Notifier.new ENV["SLACK_URL"]
   end
 
