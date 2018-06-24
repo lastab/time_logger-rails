@@ -16,13 +16,15 @@ class TimeLogsController < ApplicationController
   end
 
   def start
-    render JSON: {}, status: :ok
+    send_message_to_slack('Button press detected.')
+    render json: {}, status: :ok
   end
 
   def end
     respond_to do |format|
       format.json do
         @timelog = Timelog.new(start_at: params[:start_at], end_at: params[:end_at])
+        send_message_to_slack('button is no longer pressed. The button was pressed for ' + @timelog.duration + 'minutes')
         if @timelog.save
           render json: {}, status: :ok
         else
@@ -33,17 +35,22 @@ class TimeLogsController < ApplicationController
   end
 
   def slack_notification
-    @timelogs = Timelog.where(start_at: [(Time.now - 1.day)..Time.now])
+    @request_hours = params[:hours] || 24
+    @timelogs = Timelog.where(start_at: [(Time.now - @request_hours.hours)..Time.now])
     minutes = @timelogs.inject(0) { |sum, x| sum + x.duration }
     hours = minutes / 60
     remainder_minutes = minutes % 60
 
     message = "In last 24 hours, standing table was used for #{hours} hours and #{remainder_minutes} minutes only."
     message = "Standing Table was not used at all in last 24 hours." if @timelogs.length == 0
-    notifier = Slack::Notifier.new ENV["SLACK_URL"]
-
-    notifier.ping message, channel: '#random'
-
+    send_message_to_slack(message)
     render nothing: true
+  end
+
+  private
+
+  def send_message_to_slack(message)
+    notifier = Slack::Notifier.new ENV["SLACK_URL"]
+    notifier.ping message, channel: '#random'
   end
 end
