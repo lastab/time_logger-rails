@@ -24,7 +24,7 @@ class TimeLogsController < ApplicationController
     respond_to do |format|
       format.json do
         @timelog = Timelog.new(start_at: params[:start_at], end_at: params[:end_at])
-        send_message_to_slack('button is no longer pressed. The button was pressed for ' + @timelog.duration + 'minutes')
+        send_message_to_slack('button is no longer pressed. The button was pressed.')
         if @timelog.save
           render json: {}, status: :ok
         else
