@@ -16,7 +16,7 @@ class TimeLogsController < ApplicationController
   end
 
   def start
-    send_message_to_slack('Button press detected.')
+    send_message_to_slack('Button press detected.') if ENV["NOTIFY_SLACK"] == "1"
     render json: {}, status: :ok
   end
 
@@ -24,7 +24,7 @@ class TimeLogsController < ApplicationController
     respond_to do |format|
       format.json do
         @timelog = Timelog.new(start_at: params[:start_at], end_at: params[:end_at])
-        send_message_to_slack('button is no longer pressed. The button was pressed for ' + @timelogduration + ' minutes.')
+        send_message_to_slack("button is no longer pressed. The button was pressed for #{@timelog.duration} minutes.") if ENV["NOTIFY_SLACK"] == "1"
         if @timelog.save
           render json: {}, status: :ok
         else
@@ -51,6 +51,6 @@ class TimeLogsController < ApplicationController
 
   def send_message_to_slack(message)
     notifier = Slack::Notifier.new ENV["SLACK_URL"]
-    notifier.ping message, channel: '#random'
+    notifier.ping message, channel: ENV["SLACK_CHANNEL"]
   end
 end
